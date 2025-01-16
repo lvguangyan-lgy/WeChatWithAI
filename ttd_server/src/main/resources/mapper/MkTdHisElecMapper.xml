@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rgzn.ttd.dao.MkTdHisElecMapper">
+  <resultMap id="BaseResultMap" type="com.rgzn.ttd.model.MkTdHisElec">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ch_id" jdbcType="VARCHAR" property="chId" />
+    <result column="user_credit_code" jdbcType="VARCHAR" property="userCreditCode" />
+    <result column="participant_code" jdbcType="VARCHAR" property="participantCode" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="exchange_code" jdbcType="VARCHAR" property="exchangeCode" />
+    <result column="metering_code" jdbcType="VARCHAR" property="meteringCode" />
+    <result column="metering_name" jdbcType="VARCHAR" property="meteringName" />
+    <result column="agency_credit_code" jdbcType="VARCHAR" property="agencyCreditCode" />
+    <result column="elec_agency_id" jdbcType="VARCHAR" property="elecAgencyId" />
+    <result column="elec_agency_name" jdbcType="VARCHAR" property="elecAgencyName" />
+    <result column="ch_year_month" jdbcType="VARCHAR" property="chYearMonth" />
+    <result column="his_elec" jdbcType="DECIMAL" property="hisElec" />
+    <result column="peak_his_energy" jdbcType="DECIMAL" property="peakHisEnergy" />
+    <result column="flat_his_energy" jdbcType="DECIMAL" property="flatHisEnergy" />
+    <result column="valley_his_energy" jdbcType="DECIMAL" property="valleyHisEnergy" />
+    <result column="spike_his_energy" jdbcType="DECIMAL" property="spikeHisEnergy" />
+  </resultMap>
+</mapper>

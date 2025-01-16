@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rgzn.ttd.dao.TableMeteMapper">
+  <resultMap id="BaseResultMap" type="com.rgzn.ttd.model.TableMete">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ch_id" jdbcType="VARCHAR" property="chId" />
+    <result column="ch_table_type" jdbcType="VARCHAR" property="chTableType" />
+    <result column="ch_table_name" jdbcType="VARCHAR" property="chTableName" />
+    <result column="ch_table_comment" jdbcType="VARCHAR" property="chTableComment" />
+  </resultMap>
+
+  <select id="selectByTableNames" resultMap="BaseResultMap">
+    SELECT *  FROM table_mete WHERE ch_table_name IN
+    <foreach item="item" index="index" collection="nameList"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

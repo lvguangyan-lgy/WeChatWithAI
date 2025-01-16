@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rgzn.ttd.dao.ColumnMeteMapper">
+  <resultMap id="BaseResultMap" type="com.rgzn.ttd.model.ColumnMete">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ch_id" jdbcType="VARCHAR" property="chId" />
+    <result column="ch_table_id" jdbcType="VARCHAR" property="chTableId" />
+    <result column="ch_filed" jdbcType="VARCHAR" property="chFiled" />
+    <result column="ch_filed_type" jdbcType="VARCHAR" property="chFiledType" />
+    <result column="ch_comment" jdbcType="VARCHAR" property="chComment" />
+  </resultMap>
+</mapper>
