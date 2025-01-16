@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /proxyService
+#Openai的appkey
+chatGPT:
+  host: https://api.openai.com/
+  appKey: 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
+file:
+  path: G:\ideaWork\apps\files\
+#代理服务地址
+proxy:
+  host: 127.0.0.1
+  port: 10809
