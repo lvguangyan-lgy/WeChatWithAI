@@ -12,3 +12,7 @@ file:
 proxy:
   host: 127.0.0.1
   port: 10809
+
+dashscope:
+  qwen:
+    apiKey: sk-2730e33fdab34a61bad3f5c956b718b9

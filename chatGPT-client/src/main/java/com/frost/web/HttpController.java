@@ -1,5 +1,11 @@
 package com.frost.web;
 
+import com.alibaba.dashscope.aigc.generation.Generation;
+import com.alibaba.dashscope.aigc.generation.GenerationResult;
+import com.alibaba.dashscope.aigc.generation.models.QwenParam;
+import com.alibaba.dashscope.common.MessageManager;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.utils.Constants;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.frost.utils.BqbUtil;
@@ -40,6 +46,8 @@ public class HttpController {
     private OkHttpClient client;
     @Value("${file.path}")
     private String baseFilePath;
+    @Value("${dashscope.qwen.apiKey}")
+    private String qwenApiKey;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -120,6 +128,64 @@ public class HttpController {
             return Result.success(content);
         }catch (Exception e){
             return Result.success("chatGPT访问异常，请联系管理员！");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST,value = "qwen")
+    @ResponseBody
+    public Result qwen(@RequestBody com.frost.entity.Message message){
+        System.out.println("POST请求千问通义,sessionId:"+message.getSessionId()+",问题:"+ message.getContext());
+        try {
+            Message gptMessage = Message.of(message.getContext());
+            List<Message> gptMessages = ChatContextHolder.get(message.getSessionId());
+            if (gptMessages.size() == 0){
+                Message ofSystem = Message.ofSystem(deafualt);
+                Message system = ofSystem;
+                gptMessages.add(system);
+            }else if (gptMessages.size() > 5){
+                //更新记录
+                ChatContextHolder.remove(message.getSessionId());
+                ChatContextHolder.add(message.getSessionId(),gptMessages.get(0));
+                ChatContextHolder.add(message.getSessionId(),gptMessages.get(gptMessages.size()-4));
+                ChatContextHolder.add(message.getSessionId(),gptMessages.get(gptMessages.size()-3));
+                ChatContextHolder.add(message.getSessionId(),gptMessages.get(gptMessages.size()-2));
+                ChatContextHolder.add(message.getSessionId(),gptMessages.get(gptMessages.size()-1));
+            }
+
+            //保存问题到历史记录
+            ChatContextHolder.add(message.getSessionId(),gptMessage);
+
+
+            Generation gen = new Generation();
+            Constants.apiKey=qwenApiKey;//这里填写自己申请的APIKEY
+            //多轮对话内容可存入数据库，加载时循环放入放入MessageManager 对象实现对话内容加载
+            List<Message> gptMessageList = ChatContextHolder.get(message.getSessionId());
+            MessageManager msgManager = new MessageManager(gptMessageList.size());
+            for (Message msg : gptMessageList) {
+                msgManager.add(com.alibaba.dashscope.common.Message.builder().role(msg.getRole()).content(msg.getContent()).build());
+            }
+            QwenParam params = QwenParam.builder().model("qwen-max")//此处可根据自己需要更换AI模型
+                    .messages(msgManager.get())
+                    .seed(1234)
+                    .topP(0.8)
+                    .resultFormat("message")
+                    .enableSearch(false)
+                    .maxTokens(2048)
+                    .temperature((float)1.0)
+                    .repetitionPenalty((float)1.0)
+                    .build();
+
+            GenerationResult result = gen.call(params);
+            com.alibaba.dashscope.common.Message resultMessage = result.getOutput().getChoices().get(0).getMessage();
+            String content = resultMessage.getContent();
+
+
+            //保存回答到历史记录
+            ChatContextHolder.add(message.getSessionId(),Message.ofAssistant(content));
+            System.out.println("返回:"+content);
+            return Result.success(content);
+        }catch (Exception e){
+            return Result.success("千问通义访问异常，请联系管理员！");
         }
     }
 
